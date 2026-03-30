@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Flashcards - JEE Dreams</title>
+
+    <!-- Google Fonts (same as main page) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Extra Flashcard CSS -->
+    <style>
+        .flashcards-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 5% 5rem;
+        }
+
+        .topic-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .topic-desc {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.9rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Flashcard Box */
+        .flashcard-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .flashcard-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .flashcard-question {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .flashcard-answer {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            display: none;
+        }
+
+        .flashcard-hint {
+            margin-top: 1.5rem;
+            font-size: 1rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* Navigation Buttons */
+        .flashcard-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .control-btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            transition: 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+        }
+
+        .counter {
+            margin-top: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="subpage">
+    <div class="background-animation"></div>
+
+    <!-- Header (same theme as main page) -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">JEE Dreams</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="flashcards.html">Flashcards</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">Smart Revision Mode</div>
+        <h1>Interactive <span class="highlight">Flashcards</span></h1>
+        <p>
+            Choose a subject, select a chapter, and start revising important formulas, concepts,
+            and key points quickly.
+        </p>
+    </section>
+
+    <!-- Flashcards Content -->
+    <section class="flashcards-container">
+
+        <!-- MAIN TOPICS -->
+        <div id="mainTopics">
+            <div class="features-header">
+                <h2>Main Topics</h2>
+                <p>Select a subject to view chapters.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" onclick="showSubtopics('physics')">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Physics</h3>
+                    <p>Revise important laws, formulas, and concepts from Physics.</p>
+                    <a class="feature-link">Open Physics</a>
+                </div>
+
+                <div class="feature-card" onclick="showSubtopics('chemistry')">
+                    <div class="feature-icon">🧪</div>
+                    <h3>Chemistry</h3>
+                    <p>Revise reactions, periodic trends, and key Chemistry concepts.</p>
+                    <a class="feature-link">Open Chemistry</a>
+                </div>
+
+                <div class="feature-card" onclick="showSubtopics('maths')">
+                    <div class="feature-icon">📘</div>
+                    <h3>Mathematics</h3>
+                    <p>Revise formulas and problem-solving tricks from Maths.</p>
+                    <a class="feature-link">Open Maths</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBTOPICS -->
+        <div id="subTopics" style="display:none;">
+            <div class="features-header">
+                <h2 id="subTopicTitle"></h2>
+                <p>Select a chapter to view flashcards.</p>
+            </div>
+
+            <div class="features-grid" id="subtopicGrid"></div>
+
+            <button class="back-btn" onclick="goBackToMain()">⬅ Back to Main Topics</button>
+        </div>
+        <!-- CHEMISTRY CHAPTERS -->
+        <div id="chemChapters" style="display:none;">
+            <div class="features-header">
+                <h2 id="chemBranchTitle"></h2>
+                <p>Select a chapter to view flashcards.</p>
+            </div>
+
+            <div class="features-grid" id="chemChapterGrid"></div>
+
+            <button class="back-btn" onclick="goBackToBranches()">⬅ Back</button>
+        </div>
+
+        <!-- FLASHCARDS SECTION -->
+        <div id="flashcardsSection" style="display:none;">
+            <div class="features-header">
+                <h2 id="flashcardTitle"></h2>
+                <p>Click the flashcard to reveal the answer.</p>
+            </div>
+
+            <div class="flashcard-box" onclick="toggleAnswer()">
+                <div class="flashcard-question" id="questionText"></div>
+                <div class="flashcard-answer" id="answerText"></div>
+                <div class="flashcard-hint">Click to Flip</div>
+            </div>
+
+            <div class="flashcard-controls">
+                <button class="control-btn" onclick="prevCard()">⬅ Previous</button>
+                <button class="control-btn" onclick="nextCard()">Next ➡</button>
+            </div>
+
+            <div class="counter" id="cardCounter"></div>
+
+            <button class="back-btn" onclick="goBackToSub()">⬅ Back to Chapters</button>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>Made with <span class="footer-heart">❤</span> for JEE Aspirants</p>
+        <p>© 2026 JEE Dreams. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const data = {
+            physics: {
+                Mechanics: [
+                    { q: "Newton’s Second Law?", a: "Force is equal to mass times acceleration: F = ma" },
+                    { q: "Momentum Formula?", a: "p = mv (mass × velocity)" },
+                    { q: "Work Done Formula?", a: "W = F × d × cos(θ)" },
+                    { q: "What is Work done by a constant force?", a: "W = F.s.cos(θ)" },
+                    { q: "What is Centripetal Force in circular motion?", a: "Fc = mv²/r" }
+                ],
+                Thermodynamics: [
+                    { q: "First Law of Thermodynamics?", a: "ΔU = Q - W" },
+                    { q: "Ideal Gas Equation?", a: "PV = nRT" },
+                    { q: "RMS speed of gas molecules?", a: "Vrms = √(3RT/M)" },
+                    { q: "What is the formula for entropy change?", a: "ΔS = Q/T" },
+                    { q: "What is the formula for specific heat capacity?", a: "Q = mcΔT" }
+                ],
+                "SHM and Waves": [
+                    { q: "What is the time period of a spring-mass SHM?", a: "T = 2π √(m/k)" },
+                    { q: "Speed of Sound in Air?", a: "v = 331 + 0.6T (m/s)" },
+                    { q: "What is the formula for Doppler Effect?", a: "f' = f (v ± v₀) / (v ∓ vs)" },
+                    { q: "What is maximum speed in SHM?", a: "vmax = ωA" },
+                    { q: "What is the formula for frequency of a wave?", a: "f = v/λ" }
+                ],
+                "Electrostatics and Capacitors": [
+                    { q: "Coulomb’s Law?", a: "F = k (q₁q₂/r²)" },
+                    { q: "Electric Field due to a point charge?", a: "E = k (q/r²)" },
+                    { q: "Capacitance of a parallel plate capacitor?", a: "C = ε₀A/d" },
+                    { q: "Energy stored in a capacitor?", a: "U = ½ CV²" },
+                    { q: "What is the formula for potential difference across a capacitor?", a: "V = Q/C" }
+                ],
+                "Current Electricity": [
+                    { q: "Ohm’s Law?", a: "V = IR" },
+                    { q: "Power dissipated in a resistor?", a: "P = IV = I²R = V²/R" },
+                    { q: "Resistivity formula?", a: "R = ρL/A" },
+                    { q: "What is the formula for current density?", a: "J = I/A" },
+                    { q: "What is the formula for drift velocity?", a: "vd = I/(nAe)" }
+                ],
+                "Magnetism and EMI and AC": [
+                    { q: "Biot-Savart Law?", a: "dB = (μ₀/4π) (Idl × r̂)/r²" },
+                    { q: "Faraday’s Law of Induction?", a: "ε = -dΦ/dt" },
+                    { q: "Impedance in an RLC circuit?", a: "Z = √(R² + (XL - XC)²)" },
+                    { q: "What is the formula for magnetic force on a moving charge?", a: "F = q(v × B)" },
+                    { q: "What is the formula for self-inductance?", a: "L = NΦ/I" }
+                ],
+                "Modern Physics": [
+                    { q: "Photoelectric Equation?", a: "K.E. = hf - φ" },
+                    { q: "De Broglie Wavelength?", a: "λ = h/p" },
+                    { q: "Heisenberg Uncertainty Principle?", a: "Δx Δp ≥ ħ/2" },
+                    { q: "What is the formula for energy of a photon?", a: "E = hf" },
+                    { q: "What is the formula for half-life?", a: "N = N₀ (½)^(t/T)" }
+                ],
+                "Ray Optics and Wave Optics": [
+                    { q: "Lens Formula?", a: "1/f = 1/v - 1/u" },
+                    { q: "Magnification formula?", a: "M = v/u" },
+                    { q: "Young’s Double Slit Experiment formula?", a: "d sin(θ) = nλ" },
+                    { q: "What is the formula for critical angle?", a: "sin(θc) = n₂/n₁" },
+                    { q: "What is the formula for intensity in wave optics?", a: "I ∝ A²" }
+                ]
+
+            },
+
+            chemistry: {
+                "Physical Chemistry": {
+                    "Mole Concept": [
+                        { q: "What is 1 mole?", a: "Amount of substance containing 6.022 × 10²³ particles" },
+                        { q: "Relation between moles and mass?", a: "n = m / M (mass / molar mass)" },
+                        { q: "Molarity formula?", a: "M = moles of solute / volume (L)" },
+                        { q: "What is Avogadro’s number?", a: "6.022 × 10²³ (particles per mole)" },
+                        { q: "What is the formula for empirical formula?", a: "Empirical formula = (moles of each element) / (smallest moles)" }
+                    ],
+
+                    "Thermodynamics": [
+                        { q: "First law of thermodynamics?", a: "ΔU = Q − W" },
+                        { q: "Enthalpy relation?", a: "H = U + PV" },
+                        { q: "Gibbs free energy formula?", a: "ΔG = ΔH − TΔS" },
+                        { q: "What is the formula for entropy change?", a: "ΔS = Q/T" },
+                        { q: "What is the formula for specific heat capacity?", a: "Q = mcΔT" }
+                    ],
+
+                    "Chemical Equilibrium and Ionic Equilibrium": [
+                        { q: "What is equilibrium constant Kc?", a: "Ratio of product concentration to reactant concentration at equilibrium" },
+                        { q: "Relation between Kp and Kc?", a: "Kp = Kc(RT)^(Δn)" },
+                        { q: "pH formula?", a: "pH = −log[H⁺]" },
+                        { q: "pOH formula?", a: "pOH = −log[OH⁻]" },
+                        { q: "What is the formula for solubility product?", a: "Ksp = [A⁺]ᵐ[B⁻]ⁿ" }
+                    ],
+
+                    "Electrochemistry": [
+                        { q: "What is EMF of cell?", a: "Ecell = Ecathode − Eanode" },
+                        { q: "Nernst equation?", a: "E = E° − (0.0591/n) logQ (at 25°C)" },
+                        { q: "Faraday constant value?", a: "F = 96500 C/mol" },
+                        { q: "What is the formula for Gibbs free energy change in electrochemistry?", a: "ΔG = −nFE" },
+                        { q: "What is the formula for equilibrium constant from EMF?", a: "K = 10^(nE°/0.0591)" }
+                    ],
+
+                    "Chemical Kinetics": [
+                        { q: "Rate law for reaction?", a: "Rate = k[A]^m[B]^n" },
+                        { q: "Unit of rate constant for 1st order reaction?", a: "s⁻¹" },
+                        { q: "Half-life of first order reaction?", a: "t½ = 0.693/k" },
+                        { q: "What is the formula for activation energy?", a: "Ea = -RT ln(k/A)" },
+                        { q: "What is the formula for Arrhenius equation?", a: "k = A e^(-Ea/RT)" }
+                    ],
+
+                    "Solutions": [
+                        { q: "Raoult’s law?", a: "P = Xsolvent × P°" },
+                        { q: "Molality formula?", a: "m = moles of solute / kg solvent" },
+                        { q: "Osmotic pressure formula?", a: "π = MRT" },
+                        { q: "What is the formula for boiling point elevation?", a: "ΔTb = Kb m" },
+                        { q: "What is the formula for freezing point depression?", a: "ΔTf = Kf m" }
+                    ],
+
+                    "Solid State": [
+                        { q: "What is packing efficiency in FCC?", a: "74%" },
+                        { q: "Coordination number of BCC?", a: "8" },
+                        { q: "Density formula of unit cell?", a: "ρ = (Z × M) / (a³ × NA)" },
+                        { q: "What is the formula for edge length in FCC?", a: "a = 2r/√2" },
+                        { q: "What is the formula for edge length in BCC?", a: "a = 4r/√3" }
+                    ],
+
+                    "Atomic Structure": [
+                        { q: "de Broglie wavelength formula?", a: "λ = h/mv" },
+                        { q: "Maximum electrons in shell n?", a: "2n²" },
+                        { q: "Heisenberg uncertainty principle?", a: "Δx · Δp ≥ h/4π" },
+                        { q: "What is the formula for energy of an electron in nth orbit?", a: "E = -13.6 eV/n²" },
+                        { q: "What is the formula for radius of nth orbit in hydrogen atom?", a: "r = n²a₀ (where a₀ is Bohr radius)" }
+                    ]
+                },
+
+                "Inorganic Chemistry": {
+                    "Periodic Table and Chemical Bonding": [
+                        { q: "Trend of atomic size in periodic table?", a: "Decreases across period, increases down group" },
+                        { q: "What is electronegativity?", a: "Ability of atom to attract shared electrons" },
+                        { q: "Hybridization of carbon in CH₄?", a: "sp³" },
+                        { q: "What is the formula for bond order?", a: "Bond order = (number of bonding electrons - number of antibonding electrons) / 2" },
+                        { q: "What is the formula for formal charge?", a: "Formal charge = (valence electrons) - (non-bonding electrons) - ½(bonding electrons)" }
+                    ],
+
+                    "Coordination Compounds": [
+                        { q: "Coordination number meaning?", a: "Number of ligands directly bonded to central metal" },
+                        { q: "What is ligand?", a: "Species donating lone pair to metal ion" },
+                        { q: "Example of bidentate ligand?", a: "EDTA / oxalate (C₂O₄²⁻)" },
+                        { q: "What is the formula for stability constant?", a: "Kf = [MLn]/[M][L]ⁿ" },
+                        { q: "What is the formula for coordination number in octahedral complex?", a: "6" }
+                    ],
+
+                    "p-block": [
+                        { q: "Oxidation state of halogens generally?", a: "Mostly −1 (except with O or F)" },
+                        { q: "Which is strongest oxidizing halogen?", a: "Fluorine (F₂)" },
+                        { q: "Why noble gases are inert?", a: "Complete valence shell (stable configuration)" },
+                        { q: "What is the formula for ozone?", a: "O₃" },
+                        { q: "What is the formula for ammonia?", a: "NH₃" }
+                    ],
+
+                    "d-block and f-block": [
+                        { q: "Why transition metals show variable oxidation states?", a: "Small energy difference between ns and (n−1)d orbitals" },
+                        { q: "Why transition metals are colored?", a: "d-d transitions" },
+                        { q: "Lanthanide contraction means?", a: "Gradual decrease in size from La to Lu" },
+                        { q: "What is the formula for ferrocene?", a: "Fe(C₅H₅)₂" },
+                        { q: "What is the formula for potassium dichromate?", a: "K₂Cr₂O₇" }
+                    ],
+
+                    "Metallurgy": [
+                    { q: "What is roasting?", a: "Heating sulphide ore in presence of O₂" },
+                    { q: "What is calcination?", a: "Heating carbonate/hydrated ore in absence of air" },
+                    { q: "Flux role in metallurgy?", a: "Removes impurities by forming slag" },
+                    { q: "What is the formula for blast furnace reaction?", a: "Fe₂O₃ + 3CO → 2Fe + 3CO₂" },
+                    { q: "What is the formula for electrolytic refining of copper?", a: "Anode: impure Cu → Cu²⁺ + 2e⁻; Cathode: Cu²⁺ + 2e⁻ → pure Cu" }
+                    ],
+
+                    "Salt Analysis": [
+                    { q: "What is confirmatory test?", a: "Test that confirms presence of a specific ion" },
+                    { q: "Which gas is released with carbonate + acid?", a: "CO₂" },
+                    { q: "Brown ring test is for which ion?", a: "NO₃⁻ (nitrate)" },
+                    { q: "What is the formula for flame test color of sodium?", a: "Bright yellow" },
+                    { q: "What is the formula for flame test color of potassium?", a: "Lilac" }
+                ]
+            },
+
+            "Organic Chemistry": {
+                "GOC (General Organic Chemistry)": [
+                    { q: "What is inductive effect?", a: "Electron withdrawal/donation through sigma bonds" },
+                    { q: "What is resonance?", a: "Delocalization of electrons in conjugated system" },
+                    { q: "Carbocation stability order?", a: "3° > 2° > 1° > CH₃⁺" },
+                    { q: "What is the formula for Markovnikov’s rule?", a: "In addition of HX to alkene, H adds to C with more H" },
+                    { q: "What is the formula for anti-Markovnikov’s rule?", a: "In presence of peroxides, H adds to C with fewer H" }
+                ],
+
+                "Isomerism": [
+                    { q: "What is structural isomerism?", a: "Same formula, different connectivity" },
+                    { q: "What is stereoisomerism?", a: "Same connectivity, different spatial arrangement" },
+                    { q: "Condition for optical isomerism?", a: "Presence of chiral carbon (4 different groups)" },
+                    { q: "What is the formula for E/Z isomerism?", a: "E (opposite sides), Z (same side) based on Cahn-Ingold-Prelog rules" },
+                    { q: "What is the formula for R/S configuration?", a: "R (clockwise), S (counterclockwise) based on Cahn-Ingold-Prelog rules" }
+                ],
+
+                "Hydrocarbons": [
+                    { q: "General formula of alkane?", a: "CnH₂n+2" },
+                    { q: "Test for unsaturation?", a: "Bromine water decolorization" },
+                    { q: "Benzene structure has how many π electrons?", a: "6 π electrons" },
+                    { q: "What is the formula for IUPAC naming of alkanes?", a: "Longest chain + substituents with position numbers" },
+                    { q: "What is the formula for combustion of hydrocarbons?", a: "CnHm + (n + m/4)O₂ → nCO₂ + (m/2)H₂O" }
+                ],
+
+                "Alkyl Halides": [
+                    { q: "SN1 reaction occurs mostly in which halide?", a: "Tertiary alkyl halide" },
+                    { q: "SN2 reaction occurs mostly in which halide?", a: "Primary alkyl halide" },
+                    { q: "Best leaving group among halides?", a: "I⁻ > Br⁻ > Cl⁻ > F⁻" },
+                    { q: "What is the formula for nucleophilic substitution reaction?", a: "Nucleophile + Alkyl halide → Substituted product + Halide ion" },
+                    { q: "What is the formula for elimination reaction?", a: "Base + Alkyl halide → Alkene + Base-Halide" }
+                ],
+
+                "Alcohol, Phenol, Ether": [
+                    { q: "Alcohol + Na gives what?", a: "Alkoxide + H₂ gas" },
+                    { q: "Phenol is acidic because?", a: "Resonance stabilization of phenoxide ion" },
+                    { q: "Williamson ether synthesis used to form?", a: "Ether" },
+                    { q: "What is the formula for Lucas test?", a: "Lucas reagent (ZnCl₂ + HCl) turns 3° alcohols cloudy immediately, 2° after some time, and 1° does not react" },
+                    { q: "What is the formula for oxidation of alcohols?", a: "Primary alcohol → Aldehyde → Carboxylic acid; Secondary alcohol → Ketone; Tertiary alcohol → No reaction" }
+                ],
+
+                "Aldehyde, Ketone, Carboxylic Acid": [
+                    { q: "Tollens test is for?", a: "Aldehydes (silver mirror test)" },
+                    { q: "Carboxylic acid acidity increases with?", a: "Electron withdrawing groups (−I effect)" },
+                    { q: "Reduction of aldehyde gives?", a: "Primary alcohol" },
+                    { q: "Reduction of ketone gives?", a: "Secondary alcohol" },
+                    { q: "What is the formula for aldol condensation?", a: "2 aldehydes/ketones → β-hydroxy aldehyde/ketone → α,β-unsaturated aldehyde/ketone" }
+                ],
+
+                "Amines": [
+                    { q: "Basicity order in aqueous medium?", a: "2° > 1° > 3° > NH₃" },
+                    { q: "Carbylamine test is for?", a: "Primary amines" },
+                    { q: "Aniline is less basic because?", a: "Lone pair delocalized in resonance with benzene ring" },
+                    { q: "What is the formula for Hofmann’s bromamide reaction?", a: "Primary amide + Br₂ + NaOH → Primary amine + Na₂CO₃" },
+                    { q: "What is the formula for Gabriel phthalimide synthesis?", a: "Phthalimide + KOH + Alkyl halide → Primary amine" }
+                ],
+
+                "Biomolecules, Polymers, Chemistry in Everyday Life": [
+                    { q: "What is glucose?", a: "Monosaccharide (C₆H₁₂O₆)" },
+                    { q: "Example of addition polymer?", a: "Polythene" },
+                    { q: "What are detergents?", a: "Sodium salts of long chain sulfonates (work in hard water)" },
+                    { q: "What are soaps?", a: "Sodium salts of long chain fatty acids (form scum in hard water)" },
+                    { q: "What is the formula for saponification?", a: "Ester + NaOH → Alcohol + Soap" }
+                ]
+            }
+        },
+
+
+            maths: {
+                "Functions and Graphs": [
+                    { q: "How to find domain quickly?", a: "Check: denominator≠0, √ inside ≥0, log argument >0." },
+                    { q: "Range trick for quadratic ax²+bx+c?", a: "Use vertex y_min/max = f(-b/2a)." },
+                    { q: "Even vs Odd function test?", a: "Even: f(-x)=f(x), Odd: f(-x)=-f(x)." },
+                    { q: "Graph shift shortcut?", a: "f(x-a) shifts right a, f(x)+k shifts up k." },
+                    { q: "Injective/one-one test?", a: "Horizontal line test (graph intersects at most once)." }
+                ],
+
+                "Limits, Continuity, Differentiability": [
+                    { q: "Most used standard limit?", a: "lim(x→0) sinx/x = 1." },
+                    { q: "Standard exponential limit?", a: "lim(x→0) (e^x - 1)/x = 1." },
+                    { q: "Continuity condition at x=a?", a: "LHL = RHL = f(a)." },
+                    { q: "Differentiability fails at?", a: "Sharp corners/cusps, discontinuity, vertical tangent." },
+                    { q: "Important JEE result?", a: "Differentiable ⇒ continuous (but not vice versa)." }
+                ],
+
+                "Differentiation and AOD": [
+                    { q: "Derivative of x^n?", a: "d/dx(x^n)=n x^(n-1)." },
+                    { q: "Derivative of sinx, cosx?", a: "d(sinx)=cosx, d(cosx)=-sinx." },
+                    { q: "Derivative of tanx?", a: "sec²x." },
+                    { q: "Max/Min condition?", a: "f'(x)=0 and check f''(x): +ve min, -ve max." },
+                    { q: "Increasing/Decreasing test?", a: "f'(x)>0 increasing, f'(x)<0 decreasing." }
+                ],
+
+                "Integration and Area Under Curve": [
+                    { q: "Most important integration formula?", a: "∫ x^n dx = x^(n+1)/(n+1) + C (n≠-1)." },
+                    { q: "Integration of 1/x?", a: "∫(1/x) dx = ln|x| + C." },
+                    { q: "Definite integral key property?", a: "∫(a to b) f(x)dx = -∫(b to a) f(x)dx." },
+                    { q: "Symmetry trick for definite integrals?", a: "∫(0 to a) f(x)dx = ∫(0 to a) f(a-x)dx." },
+                    { q: "Area between curves formula?", a: "Area = ∫(x1 to x2) [upper - lower] dx." }
+                ],
+
+                "Differential Equations": [
+                    { q: "Order of differential equation?", a: "Highest derivative present in the equation." },
+                    { q: "Degree of differential equation?", a: "Power of highest derivative (only if polynomial in derivatives)." },
+                    { q: "General solution contains?", a: "As many constants as the order." },
+                    { q: "Variable separable form?", a: "dy/dx = f(x)g(y) → dy/g(y) = f(x)dx." },
+                    { q: "Linear DE standard form?", a: "dy/dx + Py = Q." }
+                ],
+
+                "Coordinate Geometry": [
+                    { q: "Distance formula between (x1,y1),(x2,y2)?", a: "√[(x2-x1)² + (y2-y1)²]." },
+                    { q: "Section formula (internal division)?", a: "Point = ((mx2+nx1)/(m+n), (my2+ny1)/(m+n))." },
+                    { q: "Slope of line joining two points?", a: "(y2-y1)/(x2-x1)." },
+                    { q: "Circle standard form?", a: "(x-h)² + (y-k)² = r²." },
+                    { q: "Conic quick IDs?", a: "Parabola: y²=4ax / x²=4ay, Ellipse: x²/a²+y²/b²=1, Hyperbola: x²/a²-y²/b²=1." }
+                ],
+
+                "Vectors and 3D Geometry": [
+                    { q: "Dot product formula?", a: "A·B = |A||B|cosθ." },
+                    { q: "Cross product formula?", a: "|A×B| = |A||B|sinθ (gives area)." },
+                    { q: "Condition for perpendicular vectors?", a: "A·B = 0." },
+                    { q: "Condition for parallel vectors?", a: "A×B = 0." },
+                    { q: "Equation of plane (normal form)?", a: "ax + by + cz + d = 0." }
+                ],
+
+                "Matrices and Determinants": [
+                    { q: "Determinant of 2x2 matrix?", a: "|a b; c d| = ad - bc." },
+                    { q: "Condition for inverse of matrix?", a: "Matrix invertible only if det(A) ≠ 0." },
+                    { q: "Adjoint-inverse formula?", a: "A⁻¹ = adj(A)/det(A)." },
+                    { q: "Most important determinant property?", a: "If two rows/cols equal → determinant = 0." },
+                    { q: "Row operation trick?", a: "Ri → Ri + kRj does NOT change determinant." }
+                ],
+
+                "Probability and Statistics": [
+                    { q: "Basic probability formula?", a: "P(E) = favourable outcomes / total outcomes." },
+                    { q: "Complement rule?", a: "P(A') = 1 - P(A)." },
+                    { q: "Addition theorem?", a: "P(A∪B)=P(A)+P(B)-P(A∩B)." },
+                    { q: "Conditional probability?", a: "P(A|B)=P(A∩B)/P(B)." },
+                    { q: "Mean and variance formulas?", a: "Mean = Σx/n, Variance = Σ(x-mean)²/n." }
+                ],
+
+                "Complex Numbers": [
+                    { q: "Standard form of complex number?", a: "z = a + ib, where i² = -1." },
+                    { q: "Modulus of z=a+ib?", a: "|z| = √(a²+b²)." },
+                    { q: "Conjugate of z=a+ib?", a: "z̅ = a - ib." },
+                    { q: "Key identity for modulus?", a: "z·z̅ = |z|²." },
+                    { q: "Argument meaning?", a: "Angle θ such that tanθ = b/a." }
+                ],
+
+                "Binomial Theorem and Permutation Combination": [
+                    { q: "Binomial theorem formula?", a: "(a+b)^n = Σ nCr a^(n-r) b^r." },
+                    { q: "General term (r+1)th term?", a: "T(r+1)=nCr a^(n-r) b^r." },
+                    { q: "Permutation formula?", a: "nPr = n!/(n-r)!." },
+                    { q: "Combination formula?", a: "nCr = n!/[r!(n-r)!]." },
+                    { q: "Most used identity?", a: "nCr = nC(n-r)." }
+                ],
+
+                "Sequence and Series": [
+                    { q: "nth term of AP?", a: "an = a + (n-1)d." },
+                    { q: "Sum of n terms of AP?", a: "Sn = n/2 [2a + (n-1)d]." },
+                    { q: "nth term of GP?", a: "an = a r^(n-1)." },
+                    { q: "Sum of n terms of GP?", a: "Sn = a(r^n - 1)/(r - 1), r≠1." },
+                    { q: "Infinite GP sum condition?", a: "|r|<1, Sum = a/(1-r)." }
+                ]
+            },
+        };    
+
+        let currentTopic = "";
+        let currentSubtopic = "";
+        let flashcards = [];
+        let currentIndex = 0;
+
+
+        function showSubtopics(topic) {
+            currentTopic = topic;
+
+            document.getElementById("mainTopics").style.display = "none";
+            document.getElementById("subTopics").style.display = "block";
+
+            let title = topic.charAt(0).toUpperCase() + topic.slice(1);
+            document.getElementById("subTopicTitle").innerText = title + " Topics";
+
+            const grid = document.getElementById("subtopicGrid");
+            grid.innerHTML = "";
+
+            for (let sub in data[topic]) {
+                grid.innerHTML += `
+                    <div class="feature-card" onclick="handleSubtopicClick('${sub}')">
+                        <div class="feature-icon">📌</div>
+                        <h3>${sub}</h3>
+                        <p>Click to open ${sub}.</p>
+                        <a class="feature-link">Open</a>
+                    </div>
+                `;
+            }
+        }
+
+        function handleSubtopicClick(sub) {
+            currentSubtopic = sub;
+
+            // If topic is chemistry, open chapters
+            if (currentTopic === "chemistry") {
+                document.getElementById("subTopics").style.display = "none";
+                document.getElementById("chemChapters").style.display = "block";
+
+                document.getElementById("chemBranchTitle").innerText = sub + " Chapters";
+
+                const chapterGrid = document.getElementById("chemChapterGrid");
+                chapterGrid.innerHTML = "";
+
+                const chapters = data.chemistry[sub];
+
+                for (let chapter in chapters) {
+                    chapterGrid.innerHTML += `
+                        <div class="feature-card" onclick="showChemFlashcards('${chapter}')">
+                            <div class="feature-icon">📘</div>
+                            <h3>${chapter}</h3>
+                            <p>Start revising ${chapter} flashcards.</p>
+                            <a class="feature-link">Start</a>
+                        </div>
+                    `;
+                }
+            }
+
+            // Physics + Maths work normally
+            else {
+                showFlashcards(sub);
+            }
+        }
+
+            function showChemFlashcards(chapter) {
+            flashcards = data.chemistry[currentSubtopic][chapter];
+            currentIndex = 0;
+
+            document.getElementById("chemChapters").style.display = "none";
+            document.getElementById("flashcardsSection").style.display = "block";
+
+            document.getElementById("flashcardTitle").innerText = chapter + " Flashcards";
+
+            loadCard();
+        }
+
+        function goBackToBranches() {
+            document.getElementById("chemChapters").style.display = "none";
+            document.getElementById("subTopics").style.display = "block";
+        }
+
+        function goBackToMain() {
+            document.getElementById("subTopics").style.display = "none";
+            document.getElementById("mainTopics").style.display = "block";
+        }
+
+        function showFlashcards(subtopic) {
+            currentSubtopic = subtopic;
+            flashcards = data[currentTopic][subtopic];
+            currentIndex = 0;
+
+            document.getElementById("subTopics").style.display = "none";
+            document.getElementById("flashcardsSection").style.display = "block";
+
+            document.getElementById("flashcardTitle").innerText = currentSubtopic + " Flashcards";
+
+            loadCard();
+        }
+
+        function goBackToSub() {
+            document.getElementById("flashcardsSection").style.display = "none";
+
+            if (currentTopic === "chemistry") {
+                document.getElementById("chemChapters").style.display = "block";
+            } else {
+                document.getElementById("subTopics").style.display = "block";
+            }
+        }
+
+
+        function loadCard() {
+            document.getElementById("questionText").innerText = flashcards[currentIndex].q;
+            document.getElementById("answerText").innerText = flashcards[currentIndex].a;
+
+            document.getElementById("answerText").style.display = "none";
+
+            document.getElementById("cardCounter").innerText =
+                `Card ${currentIndex + 1} of ${flashcards.length}`;
+        }
+
+        function toggleAnswer() {
+            const ans = document.getElementById("answerText");
+            ans.style.display = ans.style.display === "none" ? "block" : "none";
+        }
+
+        function nextCard() {
+            currentIndex++;
+            if (currentIndex >= flashcards.length) {
+                currentIndex = 0;
+            }
+            loadCard();
+        }
+
+        function prevCard() {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = flashcards.length - 1;
+            }
+            loadCard();
+        }
+    </script>
+</body>
+</html>

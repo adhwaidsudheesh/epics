@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE Dreams - Your Journey Starts Here</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #f39c12;
+            --accent-light: #f8b739;
+            --success: #27ae60;
+            --purple: #8e44ad;
+            --blue: #3498db;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --bg-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: var(--bg-light);
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.05;
+        }
+
+        .background-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 5% 4rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.15), rgba(142, 68, 173, 0.15));
+            border-radius: 50px;
+            color: var(--purple);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.3);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(243, 156, 18, 0.4);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Features Grid */
+        .features {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 5%;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .features-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .features-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.5s; }
+        .feature-card:nth-child(2) { animation-delay: 0.6s; }
+        .feature-card:nth-child(3) { animation-delay: 0.7s; }
+        .feature-card:nth-child(4) { animation-delay: 0.8s; }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s;
+        }
+
+        .feature-card:nth-child(1) .feature-icon {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.2));
+            color: var(--blue);
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(142, 68, 173, 0.2));
+            color: var(--purple);
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.2));
+            color: var(--success);
+        }
+
+        .feature-card:nth-child(4) .feature-icon {
+            background: linear-gradient(135deg, rgba(243, 156, 18, 0.1), rgba(243, 156, 18, 0.2));
+            color: var(--accent);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-link {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s;
+        }
+
+        .feature-link:hover {
+            gap: 1rem;
+        }
+
+        .feature-link::after {
+            content: '→';
+            font-size: 1.2rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 30px;
+            animation: fadeInUp 0.8s ease-out 0.9s both;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 5%;
+            color: var(--text-light);
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-heart {
+            color: #e74c3c;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(243, 156, 18, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 25px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .lang-toggle span {
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle span.active {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .features-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <header>
+        <nav class="nav-container">
+            <div class="logo">JEE Dreams</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li>
+                    <div class="lang-toggle" onclick="toggleLanguage()">
+                        <span id="lang-eng" class="active">English</span>
+                        <span id="lang-hin">हिंदी</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-badge">✨ Empowering Dreams, One Student at a Time</div>
+        <h1>
+            Your <span class="highlight">JEE Journey</span><br>
+            Starts Right Here
+        </h1>
+        <p>
+            Education is the most powerful weapon you can use to change the world. 
+            We're here to make your IIT dreams accessible, achievable, and absolutely free.
+        </p>
+        <a href="#features" class="cta-button">Begin Your Journey</a>
+    </section>
+
+    <section class="features" id="features">
+        <div class="features-header">
+            <h2>Everything You Need to Succeed</h2>
+            <p>Comprehensive tools designed to make JEE preparation effective and engaging</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>AI Chatbot</h3>
+                <p>
+                    Ask questions anytime, anywhere. Our intelligent chatbot provides instant answers to your 
+                    doubts in Physics, Chemistry, and Mathematics.
+                </p>
+                <a href="chatbot.html" class="feature-link">Start Learning</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Complete Syllabus</h3>
+                <p>
+                    Access the entire JEE syllabus organized by subjects and topics. Track your progress 
+                    and never miss an important concept.
+                </p>
+                <a href="JEE_Main_Syllabus_2025.pdf" class="feature-link">Explore Syllabus</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Flashcards</h3>
+                <p>
+                    Master formulas, concepts, and key points with interactive flashcards. 
+                    Perfect for quick revision before exams.
+                </p>
+                <a href="flashcards.html" class="feature-link">Start Revising</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Previous Year Questions</h3>
+                <p>
+                    Practice with real JEE questions from past years. Understand patterns, 
+                    improve speed, and build exam confidence.
+                </p>
+                <a href="pyq.html" class="feature-link">Practice Now</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🧪</div>
+                <h3>Practice Quizzes</h3>
+                <p>
+                    Test your knowledge in Physics, Chemistry, and Mathematics with interactive, bilingual practice quizzes.
+                </p>
+                <a href="quiz.html" class="feature-link">Take a Quiz</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Free Access</p>
+            </div>
+             <div class="stat-item">
+                 <h3>1000+</h3>
+                <p>Practice Questions</p>
+            </div>
+            <div class="stat-item">
+                <h3>∞</h3>
+                <p>Possibilities</p>
+            </div>
+        </div>
+    </section>
+         <section class="features">
+    <div class="features-header">
+        <h2>English to Hindi Translator</h2>
+        <p>Translate your doubts instantly</p>
+    </div>
+
+    <div style="text-align:center;">
+        <textarea id="englishText" 
+            placeholder="Enter English text"
+            style="width:70%; height:120px; padding:15px; border-radius:15px; border:1px solid #ccc;">
+        </textarea>
+
+        <br><br>
+
+        <button onclick="translateText()" class="cta-button">
+            Translate to Hindi
+        </button>
+
+        <br><br>
+
+        <textarea id="hindiText" 
+            placeholder="Hindi Translation"
+            style="width:70%; height:120px; padding:15px; border-radius:15px; border:1px solid #ccc;"
+            readonly>
+        </textarea>
+    </div>
+</section>
+    <footer>
+        <p>Made with <span class="footer-heart">♥</span> for aspiring engineers</p>
+        <p>© 2024 JEE Dreams. Breaking barriers, building futures.</p>
+    </footer>
+ 
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                hero.style.opacity = 1 - scrolled / 600;
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        const staticTranslations = [
+            { sel: '.logo', hi: 'जेईई ड्रीम्स', en: 'JEE Dreams' },
+            { sel: '.nav-links li:nth-child(1) a', hi: 'विशेषताएं', en: 'Features' },
+            { sel: '.nav-links li:nth-child(2) a', hi: 'हमारे बारे में', en: 'About' },
+            { sel: '.nav-links li:nth-child(3) a', hi: 'संपर्क करें', en: 'Contact' },
+            { sel: '.hero-badge', hi: '✨ छात्रों के सपनों को साकार करना', en: '✨ Empowering Dreams, One Student at a Time' },
+            { sel: '.hero h1', hi: 'आपकी <span class="highlight">JEE यात्रा</span><br>यहीं से शुरू होती है', en: 'Your <span class="highlight">JEE Journey</span><br>Starts Right Here' },
+            { sel: '.hero p', hi: 'शिक्षा दुनिया को बदलने का सबसे शक्तिशाली हथियार है। हम आपके IIT के सपनों को सुलभ और बिल्कुल मुफ्त बनाने आए हैं।', en: `Education is the most powerful weapon you can use to change the world. 
+            We're here to make your IIT dreams accessible, achievable, and absolutely free.` },
+            { sel: '.hero .cta-button', hi: 'अपनी यात्रा शुरू करें', en: 'Begin Your Journey' },
+            { sel: '.features-header h2', hi: 'सफलता के लिए सब कुछ', en: 'Everything You Need to Succeed' },
+            { sel: '.features-header p', hi: 'JEE की तैयारी को प्रभावी बनाने के लिए व्यापक उपकरण', en: 'Comprehensive tools designed to make JEE preparation effective and engaging' },
+            { sel: '.feature-card:nth-child(1) h3', hi: 'एआई चैटबॉट', en: 'AI Chatbot' },
+            { sel: '.feature-card:nth-child(1) p', hi: 'कभी भी, कहीं भी प्रश्न पूछें। हमारा चैटबॉट आपके भौतिकी, रसायन विज्ञान और गणित के संदेहों का तुरंत उत्तर देता है।', en: 'Ask questions anytime, anywhere. Our intelligent chatbot provides instant answers to your doubts in Physics, Chemistry, and Mathematics.' },
+            { sel: '.feature-card:nth-child(1) .feature-link', hi: 'सीखना शुरू करें', en: 'Start Learning' },
+            { sel: '.feature-card:nth-child(2) h3', hi: 'पूरा पाठ्यक्रम', en: 'Complete Syllabus' },
+            { sel: '.feature-card:nth-child(2) p', hi: 'पूरे JEE पाठ्यक्रम तक पहुंचें। प्रगति को ट्रैक करें और महत्वपूर्ण अवधारणाओं को याद रखें।', en: 'Access the entire JEE syllabus organized by subjects and topics. Track your progress and never miss an important concept.' },
+            { sel: '.feature-card:nth-child(2) .feature-link', hi: 'पाठ्यक्रम देखें', en: 'Explore Syllabus' },
+            { sel: '.feature-card:nth-child(3) h3', hi: 'स्मार्ट फ्लैशकार्ड', en: 'Smart Flashcards' },
+            { sel: '.feature-card:nth-child(3) p', hi: 'फ्लैशकार्ड के साथ सूत्र और अवधारणाओं को समझें। परीक्षा से पहले त्वरित रिवीजन के लिए सही है।', en: 'Master formulas, concepts, and key points with interactive flashcards. Perfect for quick revision before exams.' },
+            { sel: '.feature-card:nth-child(3) .feature-link', hi: 'रिवीजन शुरू करें', en: 'Start Revising' },
+            { sel: '.feature-card:nth-child(4) h3', hi: 'पिछले वर्ष के प्रश्न', en: 'Previous Year Questions' },
+            { sel: '.feature-card:nth-child(4) p', hi: 'पिछले वर्षों के वास्तविक JEE प्रश्नों का अभ्यास करें। पैटर्न समझें और परीक्षा का आत्मविश्वास बढ़ाएं।', en: 'Practice with real JEE questions from past years. Understand patterns, improve speed, and build exam confidence.' },
+            { sel: '.feature-card:nth-child(4) .feature-link', hi: 'अभी अभ्यास करें', en: 'Practice Now' },
+            { sel: '.feature-card:nth-child(5) h3', hi: 'अभ्यास प्रश्नोत्तरी', en: 'Practice Quizzes' },
+            { sel: '.feature-card:nth-child(5) p', hi: 'अंतःक्रियात्मक, द्विभाषी अभ्यास प्रश्नोत्तरी के साथ भौतिकी, रसायन विज्ञान और गणित में अपने ज्ञान का परीक्षण करें।', en: 'Test your knowledge in Physics, Chemistry, and Mathematics with interactive, bilingual practice quizzes.' },
+            { sel: '.feature-card:nth-child(5) .feature-link', hi: 'प्रश्नोत्तरी लें', en: 'Take a Quiz' },
+            { sel: '.stat-item:nth-child(1) p', hi: 'निःशुल्क पहुँच', en: 'Free Access' },
+            { sel: '.stat-item:nth-child(2) p', hi: 'अभ्यास प्रश्न', en: 'Practice Questions' },
+            { sel: '.stat-item:nth-child(3) p', hi: 'संभावनाएं', en: 'Possibilities' },
+            { sel: '#englishText', attr: 'placeholder', hi: 'अंग्रेजी पाठ दर्ज करें', en: 'Enter English text' },
+            { sel: '#hindiText', attr: 'placeholder', hi: 'हिंदी अनुवाद', en: 'Hindi Translation' }
+        ];
+
+        function applyTranslations(lang) {
+            staticTranslations.forEach(item => {
+                const el = document.querySelector(item.sel);
+                if (el) {
+                    if (item.attr) el.setAttribute(item.attr, item[lang]);
+                    else el.innerHTML = item[lang];
+                }
+            });
+            
+            // Manual overrides for elements without highly specific selectors
+            const feats = document.querySelectorAll('.features-header');
+            if (feats.length > 1) {
+                const h2 = feats[1].querySelector('h2');
+                const p = feats[1].querySelector('p');
+                if (h2) h2.innerHTML = lang === 'hi' ? 'अंग्रेजी से हिंदी अनुवादक' : 'English to Hindi Translator';
+                if (p) p.innerHTML = lang === 'hi' ? 'अपने संदेहों का तुरंत अनुवाद करें' : 'Translate your doubts instantly';
+            }
+
+            const btns = document.querySelectorAll('.cta-button');
+            if (btns.length > 1) {
+                btns[1].innerHTML = lang === 'hi' ? 'हिंदी में अनुवाद करें' : 'Translate to Hindi';
+            }
+
+            const fPs = document.querySelectorAll('footer p');
+            if (fPs.length >= 2) {
+                fPs[0].innerHTML = lang === 'hi' ? 'इंजीनियरों के लिए <span class="footer-heart">♥</span> से बनाया गया' : 'Made with <span class="footer-heart">♥</span> for aspiring engineers';
+                fPs[1].innerHTML = lang === 'hi' ? '© 2024 JEE Dreams. बाधाओं को तोड़ना, भविष्य का निर्माण करना।' : '© 2024 JEE Dreams. Breaking barriers, building futures.';
+            }
+        }
+
+        let currentLang = 'en';
+        function toggleLanguage() {
+            const engSpan = document.getElementById('lang-eng');
+            const hinSpan = document.getElementById('lang-hin');
+            
+            if (currentLang === 'en') {
+                currentLang = 'hi';
+                engSpan.classList.remove('active');
+                hinSpan.classList.add('active');
+            } else {
+                currentLang = 'en';
+                hinSpan.classList.remove('active');
+                engSpan.classList.add('active');
+            }
+            applyTranslations(currentLang);
+        }
+
+        async function translateText() {
+    let text = document.getElementById("englishText").value;
+
+    if (text.trim() === "") {
+        alert("Please enter some text!");
+        return;
+    }
+
+    let response = await fetch(
+        "https://api.mymemory.translated.net/get?q=" 
+        + encodeURIComponent(text) + "&langpair=en|hi"
+    );
+
+    let data = await response.json();
+
+    document.getElementById("hindiText").value =
+        data.responseData.translatedText;
+}
+
+    </script>
+</body>
+</html>

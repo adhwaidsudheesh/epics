@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE Dreams - Practice Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #f39c12;
+            --accent-light: #f8b739;
+            --success: #27ae60;
+            --purple: #8e44ad;
+            --blue: #3498db;
+            --red: #e74c3c;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --bg-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.05;
+        }
+
+        .background-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(243, 156, 18, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 25px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .lang-toggle span {
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .lang-toggle span.active {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* Main Context */
+        .quiz-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            flex-grow: 1;
+            width: 95%;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-header h1 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Subject Tabs */
+        .subject-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .subject-tab {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--bg-light);
+            border: 2px solid transparent;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .subject-tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .subject-tab.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+            border-color: var(--accent);
+        }
+
+        /* Quiz Card */
+        .question-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--blue);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .option:hover:not(.disabled) {
+            border-color: var(--blue);
+            background: #f0f7fc;
+        }
+
+        .option.selected {
+            border-color: var(--blue);
+            background: #e1f0fa;
+        }
+
+        .option.correct {
+            border-color: var(--success);
+            background: #e8f8f0;
+            color: #1e8449;
+        }
+
+        .option.incorrect {
+            border-color: var(--red);
+            background: #fdedec;
+            color: #c0392b;
+        }
+
+        .option.disabled {
+            cursor: default;
+        }
+
+        .option-label {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #555;
+            flex-shrink: 0;
+        }
+
+        .option.selected .option-label { background: var(--blue); color: white; }
+        .option.correct .option-label { background: var(--success); color: white; }
+        .option.incorrect .option-label { background: var(--red); color: white; }
+
+        /* Controls */
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            border-top: 1px solid #eee;
+            padding-top: 1.5rem;
+        }
+
+        .cta-button {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        .cta-button:disabled {
+            background: #ccc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .solution-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #fdfae5;
+            border-radius: 10px;
+            border-left: 5px solid var(--accent);
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .solution-title {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .solution-text {
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .question-tracker {
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            color: var(--text-light);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo" id="ui-logo">JEE Dreams</a>
+            <ul class="nav-links">
+                <li><a href="index.html" id="ui-home">Home</a></li>
+                <li>
+                    <div class="lang-toggle" onclick="toggleLanguage()">
+                        <span id="lang-eng" class="active">English</span>
+                        <span id="lang-hin">हिंदी</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="quiz-container">
+        <div class="quiz-header">
+            <h1 id="ui-title">Practice Quiz</h1>
+            <p id="ui-subtitle" style="color: var(--text-light); margin-bottom: 1rem;">Select a subject to begin</p>
+        </div>
+
+        <div class="subject-tabs">
+            <button class="subject-tab active" onclick="loadSubject('physics')" id="tab-physics">Physics</button>
+            <button class="subject-tab" onclick="loadSubject('chemistry')" id="tab-chemistry">Chemistry</button>
+            <button class="subject-tab" onclick="loadSubject('maths')" id="tab-maths">Mathematics</button>
+        </div>
+
+        <div id="question-container">
+            <!-- Questions rendered here by JS -->
+        </div>
+
+        <div class="quiz-controls" id="quiz-controls" style="display: none;">
+            <div class="question-tracker" id="ui-tracker">Question x of y</div>
+            <div>
+                <button class="cta-button" id="btn-submit" onclick="submitAnswer()" disabled>Submit Answer</button>
+                <button class="cta-button" id="btn-next" onclick="nextQuestion()" style="display: none;">Next Question</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p id="ui-footer">© 2024 JEE Dreams. Breaking barriers, building futures.</p>
+    </footer>
+
+    <script src="quizQuestions.js"></script>
+    <script>
+
+        // State Variables
+        let currentLang = 'en';
+        let currentSubject = 'physics';
+        let currentQuestionIndex = 0;
+        let selectedOptionIndex = null;
+        let isAnswerSubmitted = false;
+
+        // UI Translations
+        const uiDict = {
+            'ui-logo': { en: 'JEE Dreams', hi: 'जेईई ड्रीम्स' },
+            'ui-home': { en: 'Home', hi: 'होम' },
+            'ui-title': { en: 'Practice Quiz', hi: 'अभ्यास प्रश्नोत्तरी' },
+            'ui-subtitle': { en: 'Select a subject to begin', hi: 'शुरू करने के लिए एक विषय चुनें' },
+            'tab-physics': { en: 'Physics', hi: 'भौतिक विज्ञान' },
+            'tab-chemistry': { en: 'Chemistry', hi: 'रसायन विज्ञान' },
+            'tab-maths': { en: 'Mathematics', hi: 'गणित' },
+            'ui-solution-title': { en: 'Solution & Explanation', hi: 'समाधान और स्पष्टीकरण' },
+            'btn-submit': { en: 'Submit Answer', hi: 'उत्तर जमा करें' },
+            'btn-next': { en: 'Next Question', hi: 'अगला प्रश्न' },
+            'ui-footer': { en: '© 2024 JEE Dreams. Breaking barriers, building futures.', hi: '© 2024 JEE Dreams. बाधाओं को तोड़ना, भविष्य का निर्माण करना।' }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'hi' : 'en';
+            
+            // Toggle active class on buttons
+            document.getElementById('lang-eng').className = currentLang === 'en' ? 'active' : '';
+            document.getElementById('lang-hin').className = currentLang === 'hi' ? 'active' : '';
+
+            // Update UI elements
+            updateUI();
+            
+            // Re-render current question
+            renderQuestion();
+        }
+
+        function updateUI() {
+            for (const [id, translations] of Object.entries(uiDict)) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.innerText = translations[currentLang];
+                }
+            }
+
+            // Update tracker
+            const tracker = document.getElementById('ui-tracker');
+            if (tracker) {
+                const total = quizData[currentSubject].length;
+                tracker.innerText = currentLang === 'en' 
+                    ? `Question ${currentQuestionIndex + 1} of ${total}`
+                    : `प्रश्न ${currentQuestionIndex + 1} / ${total}`;
+            }
+        }
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function loadSubject(subject) {
+            currentSubject = subject;
+            currentQuestionIndex = 0;
+            
+            // Shuffle the complete subject array
+            quizData[currentSubject] = shuffleArray([...quizData[currentSubject]]);
+            
+            resetState();
+
+            // Update tabs visually
+            document.querySelectorAll('.subject-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${subject}`).classList.add('active');
+
+            document.getElementById('quiz-controls').style.display = 'flex';
+            renderQuestion();
+            updateUI();
+        }
+
+        function resetState() {
+            selectedOptionIndex = null;
+            isAnswerSubmitted = false;
+            document.getElementById('btn-submit').style.display = 'inline-block';
+            document.getElementById('btn-submit').disabled = true;
+            document.getElementById('btn-next').style.display = 'none';
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('question-container');
+            const data = quizData[currentSubject][currentQuestionIndex];
+            
+            if (!data) return;
+
+            const labels = ['A', 'B', 'C', 'D'];
+            
+            let html = `
+                <div class="question-card active">
+                    <div class="question-text">${data.q[currentLang]}</div>
+                    <ul class="options-list">
+            `;
+
+            data.options.forEach((opt, idx) => {
+                let classes = 'option';
+                if (isAnswerSubmitted) {
+                    classes += ' disabled';
+                    if (idx === data.correctIndex) classes += ' correct';
+                    else if (idx === selectedOptionIndex) classes += ' incorrect';
+                } else if (idx === selectedOptionIndex) {
+                    classes += ' selected';
+                }
+
+                html += `
+                    <li class="${classes}" onclick="selectOption(${idx})">
+                        <div class="option-label">${labels[idx]}</div>
+                        <div>${opt[currentLang]}</div>
+                    </li>
+                `;
+            });
+
+            html += `</ul>
+                <div class="solution-box" id="solution-box" style="display: ${isAnswerSubmitted ? 'block' : 'none'}">
+                    <div class="solution-title" id="ui-solution-title">${uiDict['ui-solution-title'][currentLang]}</div>
+                    <div class="solution-text">${data.solution[currentLang]}</div>
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        function selectOption(index) {
+            if (isAnswerSubmitted) return;
+            selectedOptionIndex = index;
+            document.getElementById('btn-submit').disabled = false;
+            renderQuestion();
+        }
+
+        function submitAnswer() {
+            if (selectedOptionIndex === null || isAnswerSubmitted) return;
+            
+            isAnswerSubmitted = true;
+            renderQuestion(); // Re-render to show correct/incorrect styling and solution
+            
+            document.getElementById('btn-submit').style.display = 'none';
+            
+            // Show next button if not last question
+            if (currentQuestionIndex < quizData[currentSubject].length - 1) {
+                document.getElementById('btn-next').style.display = 'inline-block';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData[currentSubject].length - 1) {
+                currentQuestionIndex++;
+                resetState();
+                renderQuestion();
+                updateUI();
+            }
+        }
+
+        // Initialize first subject
+        window.onload = () => {
+            loadSubject('physics');
+        };
+    </script>
+</body>
+</html>

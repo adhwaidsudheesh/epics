@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE Dreams - AI Study Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- MathJax for rendering math formulas -->
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$']] },
+            options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #f39c12;
+            --accent-light: #f8b739;
+            --success: #27ae60;
+            --purple: #8e44ad;
+            --blue: #3498db;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --bg-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--bg-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            max-width: 1200px;
+            width: 100%;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .chat-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-header p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Chat Box */
+        .chat-box {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            max-width: 85%;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            color: var(--white);
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, var(--blue), var(--success));
+            color: var(--white);
+        }
+
+        .message-content {
+            background: var(--bg-light);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            line-height: 1.8;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+
+        .message-content strong {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .message-content em {
+            font-style: italic;
+        }
+
+        .message-content h2,
+        .message-content h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .message-content li {
+            line-height: 1.6;
+        }
+
+        .message-content code {
+            font-size: 0.9em;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+        }
+
+        .message.bot .message-content {
+            background: var(--bg-light);
+            color: var(--text);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            max-width: 85%;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 0.4rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-light);
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        /* Input Area */
+        .input-area {
+            padding: 1.5rem 2rem;
+            background: var(--white);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        #messageInput {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--bg-light);
+            border-radius: 25px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        #messageInput:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+        }
+
+        #sendButton {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #sendButton:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(243, 156, 18, 0.3);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            padding: 1rem 2rem 0;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .quick-action {
+            padding: 0.5rem 1rem;
+            background: var(--white);
+            border: 2px solid var(--bg-light);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+        }
+
+        .quick-action:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-light);
+            border-radius: 20px;
+            padding: 0.25rem;
+            gap: 0;
+            margin-left: auto;
+            border: 2px solid var(--bg-light);
+            transition: border-color 0.3s;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .lang-toggle:hover {
+            border-color: var(--accent);
+        }
+
+        .lang-toggle span {
+            padding: 0.3rem 0.85rem;
+            border-radius: 16px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: all 0.3s;
+            user-select: none;
+        }
+
+        .lang-toggle span.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+            box-shadow: 0 2px 8px rgba(243, 156, 18, 0.35);
+        }
+
+        /* Translating indicator on bot messages */
+        /* Translation progress banner */
+        .translating-banner {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .translating-badge {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            opacity: 0.8;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+        }
+
+        .welcome-message h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Scrollbar */
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: var(--bg-light);
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: var(--text-light);
+            border-radius: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chat-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .chat-box {
+                height: calc(100vh - 250px);
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .input-area {
+                padding: 1rem;
+                flex-direction: column;
+            }
+
+            #sendButton {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="nav-container">
+            <div class="logo">JEE Dreams</div>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </nav>
+    </header>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>🤖 AI Study Assistant</h1>
+            <p>Ask me anything about Physics, Chemistry, or Mathematics!</p>
+        </div>
+
+        <div class="chat-box">
+            <div class="messages-container" id="messagesContainer">
+                <div class="welcome-message">
+                    <div class="welcome-icon">💬</div>
+                    <h2>Hello, Future Engineer! 👋</h2>
+                    <p>I'm your AI study companion, here to help you ace JEE.</p>
+                    <p>Ask me concepts, formulas, problem-solving techniques, or anything JEE-related!</p>
+                </div>
+
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="message-avatar">🤖</div>
+                    <div class="typing-dots">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="quick-action" id="qa-newton" onclick="sendQuickMessage('Explain Newton\'s laws of motion')">📚 Newton's Laws</button>
+                <button class="quick-action" id="qa-organic" onclick="sendQuickMessage('What are the key organic chemistry reactions for JEE?')">🧪 Organic Chemistry</button>
+                <button class="quick-action" id="qa-integration" onclick="sendQuickMessage('Explain integration by parts with an example')">📐 Integration</button>
+                <button class="quick-action" id="qa-tips" onclick="sendQuickMessage('Tips for JEE preparation')">💡 Study Tips</button>
+                <div class="lang-toggle" onclick="toggleLanguage()" title="Switch language / भाषा बदलें">
+                    <span id="lang-eng" class="active">English</span>
+                    <span id="lang-hin">हिंदी</span>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="messageInput" 
+                        placeholder="Type your question here..."
+                        onkeypress="handleKeyPress(event)"
+                    >
+                </div>
+                <button id="sendButton" onclick="sendMessage()">
+                    <span>Send</span>
+                    <span>→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        const API_KEY = 'AIzaSyCMIY4qKLkxLef9YHq6215Hg11AGdRaTV4';
+       
+        
+        const messagesContainer = document.getElementById('messagesContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        // Rate limiting - track last request time
+        let lastRequestTime = 0;
+        const MIN_REQUEST_INTERVAL = 4000; // 4 seconds between requests
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            messageInput.value = message;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            if (API_KEY === 'YOUR_API_KEY_HERE') {
+                showError('⚠️ Please add your Gemini API key in the code! Get it from: https://makersuite.google.com/app/apikey');
+                return;
+            }
+
+            // Rate limiting check
+            const now = Date.now();
+            const timeSinceLastRequest = now - lastRequestTime;
+            
+            if (timeSinceLastRequest < MIN_REQUEST_INTERVAL && lastRequestTime !== 0) {
+                const waitTime = Math.ceil((MIN_REQUEST_INTERVAL - timeSinceLastRequest) / 1000);
+                showError(`⏳ Please wait ${waitTime} seconds before sending another message to avoid rate limits.`);
+                return;
+            }
+
+            // Clear input and disable button
+            messageInput.value = '';
+            sendButton.disabled = true;
+
+            // Remove welcome message if present
+            const welcomeMsg = messagesContainer.querySelector('.welcome-message');
+            if (welcomeMsg) {
+                welcomeMsg.remove();
+            }
+
+            // Add user message (translated to Hindi if Hindi mode is ON)
+            if (currentLang === 'hi') {
+                const userHindi = await translateToHindi(message);
+                addMessage(userHindi || message, 'user', message);  // pass English original
+            } else {
+                addMessage(message, 'user');
+            }
+
+            // Show typing indicator
+            typingIndicator.classList.add('active');
+            scrollToBottom();
+
+            try {
+                // Update last request time
+                lastRequestTime = Date.now();
+
+                // Call Google Gemini API
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `You are an expert JEE (Joint Entrance Examination) tutor helping students prepare for one of India's toughest engineering entrance exams. You specialize in Physics, Chemistry, and Mathematics at the JEE level.
+
+Your teaching style:
+- Explain concepts clearly and concisely
+- Use examples and analogies when helpful
+- Break down complex problems into steps
+- Encourage critical thinking
+- Be supportive and motivating
+- Focus on JEE-relevant content and problem-solving techniques
+
+Student's question: ${message}`
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 4096,
+                        }
+                    })
+                });
+
+                // Hide typing indicator
+                typingIndicator.classList.remove('active');
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Debug: log the full response
+                console.log('Full API response:', data);
+                
+                // Check for safety blocks or incomplete responses
+                if (data.candidates?.[0]?.finishReason === 'SAFETY') {
+                    showError('⚠️ Response was blocked by safety filters. Try rephrasing your question.');
+                    return;
+                }
+                
+                if (data.candidates?.[0]?.finishReason === 'MAX_TOKENS') {
+                    showError('⚠️ Response was too long. Increasing token limit...');
+                }
+                
+                // Extract response text
+                const botResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I couldn\'t generate a response.';
+                
+                console.log('Bot response length:', botResponse.length);
+                console.log('Finish reason:', data.candidates?.[0]?.finishReason);
+
+                // Add bot message (translated to Hindi if Hindi mode is ON)
+                if (currentLang === 'hi') {
+                    const tempId = 'translating-' + Date.now();
+                    const tempDiv = document.createElement('div');
+                    tempDiv.className = 'message bot';
+                    tempDiv.id = tempId;
+                    tempDiv.innerHTML =
+                        '<div class="message-avatar">🤖</div>' +
+                        '<div class="message-content" style="color:var(--text-light);font-style:italic;">🔄 अनुवाद हो रहा है…</div>';
+                    messagesContainer.insertBefore(tempDiv, typingIndicator);
+                    scrollToBottom();
+                    const botHindi = await translateToHindi(botResponse);
+                    const tempEl = document.getElementById(tempId);
+                    if (tempEl) tempEl.remove();
+                    addMessage(botHindi || botResponse, 'bot', botResponse);  // pass English original
+                    if (window.MathJax) MathJax.typesetPromise();
+                } else {
+                    addMessage(botResponse, 'bot');
+                    if (window.MathJax) MathJax.typesetPromise();
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                typingIndicator.classList.remove('active');
+                
+                let errorMessage = 'Sorry, something went wrong. ';
+                
+                if (error.message.includes('API_KEY_INVALID') || error.message.includes('invalid')) {
+                    errorMessage = '❌ Invalid API key! Please check your API key in the code.';
+                } else if (error.message.includes('RATE_LIMIT') || error.message.includes('quota')) {
+                    errorMessage = '⏳ Rate limit reached. Please wait a moment and try again.';
+                } else if (error.message.includes('Failed to fetch')) {
+                    errorMessage = '🌐 Connection error. Please check your internet and try again.';
+                } else {
+                    errorMessage += error.message;
+                }
+
+                showError(errorMessage);
+            } finally {
+                sendButton.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        function addMessage(text, sender, englishOriginal) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.dataset.original = englishOriginal || text;  // always store English
+            messageDiv.dataset.sender = sender;
+
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = sender === 'user' ? '👤' : '🤖';
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            content.innerHTML = formatText(text);
+
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+
+            // Insert before typing indicator
+            messagesContainer.insertBefore(messageDiv, typingIndicator);
+            scrollToBottom();
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            messagesContainer.insertBefore(errorDiv, typingIndicator);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Focus input on load
+        window.addEventListener('load', () => {
+            messageInput.focus();
+        });
+
+        // ── Language / Translation ──────────────────────────────────────────
+        let currentLang = 'en';
+
+        const staticTranslations = {
+            en: {
+                chatTitle:    '🤖 AI Study Assistant',
+                chatSubtitle: 'Ask me anything about Physics, Chemistry, or Mathematics!',
+                welcomeHeading: 'Hello, Future Engineer! 👋',
+                welcomeP1: "I'm your AI study companion, here to help you ace JEE.",
+                welcomeP2: 'Ask me concepts, formulas, problem-solving techniques, or anything JEE-related!',
+                qa_newton:      "📚 Newton's Laws",
+                qa_organic:     '🧪 Organic Chemistry',
+                qa_integration: '📐 Integration',
+                qa_tips:        '💡 Study Tips',
+                inputPlaceholder: 'Type your question here...',
+                sendBtnText: 'Send',
+                backLink: '← Back to Home',
+            },
+            hi: {
+                chatTitle:    '🤖 AI अध्ययन सहायक',
+                chatSubtitle: 'भौतिकी, रसायन विज्ञान या गणित के बारे में कुछ भी पूछें!',
+                welcomeHeading: 'नमस्ते, भावी इंजीनियर! 👋',
+                welcomeP1: 'मैं आपका AI अध्ययन साथी हूँ, JEE में सफल होने में मदद करने के लिए।',
+                welcomeP2: 'अवधारणाएं, सूत्र, समस्या-समाधान तकनीक या JEE से संबंधित कुछ भी पूछें!',
+                qa_newton:      '📚 न्यूटन के नियम',
+                qa_organic:     '🧪 कार्बनिक रसायन',
+                qa_integration: '📐 समाकलन',
+                qa_tips:        '💡 अध्ययन सुझाव',
+                inputPlaceholder: 'अपना प्रश्न यहाँ लिखें...',
+                sendBtnText: 'भेजें',
+                backLink: '← होम पर वापस',
+            }
+        };
+
+        function applyUITranslations(lang) {
+            const t = staticTranslations[lang];
+            const h1 = document.querySelector('.chat-header h1');
+            const subP = document.querySelector('.chat-header p');
+            if (h1) h1.textContent = t.chatTitle;
+            if (subP) subP.textContent = t.chatSubtitle;
+            const wh = document.querySelector('.welcome-message h2');
+            const wp = document.querySelectorAll('.welcome-message p');
+            if (wh) wh.textContent = t.welcomeHeading;
+            if (wp[0]) wp[0].textContent = t.welcomeP1;
+            if (wp[1]) wp[1].textContent = t.welcomeP2;
+            const qaMap = {
+                'qa-newton': 'qa_newton',
+                'qa-organic': 'qa_organic',
+                'qa-integration': 'qa_integration',
+                'qa-tips': 'qa_tips'
+            };
+            Object.entries(qaMap).forEach(([id, key]) => {
+                const btn = document.getElementById(id);
+                if (btn) btn.textContent = t[key];
+            });
+            messageInput.placeholder = t.inputPlaceholder;
+            const sendSpan = sendButton.querySelector('span:first-child');
+            if (sendSpan) sendSpan.textContent = t.sendBtnText;
+            const backLink = document.querySelector('.back-link');
+            if (backLink) backLink.textContent = t.backLink;
+        }
+
+        // Shared text formatter used by addMessage and toggleLanguage
+        function formatText(text) {
+            return text
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/^### (.+)$/gm, '<h3 style="margin:1rem 0 0.5rem;font-size:1.2rem;color:var(--primary);">$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2 style="margin:1.5rem 0 0.5rem;font-size:1.4rem;color:var(--primary);">$1</h2>')
+                .replace(/^\* (.+)$/gm, '<li style="margin-left:1.5rem;">$1</li>')
+                .replace(/^\d+\. (.+)$/gm, '<li style="margin-left:1.5rem;">$1</li>')
+                .replace(/`(.+?)`/g, '<code style="background:#f0f0f0;padding:2px 6px;border-radius:3px;font-family:monospace;">$1</code>')
+                .replace(/^---$/gm, '<hr style="margin:1rem 0;border:none;border-top:1px solid #ddd;">')
+                .replace(/\n/g, '<br>');
+        }
+
+        async function toggleLanguage() {
+            const engSpan = document.getElementById('lang-eng');
+            const hinSpan = document.getElementById('lang-hin');
+            const langToggleEl = document.querySelector('.lang-toggle');
+
+            // Prevent double-clicks during translation
+            langToggleEl.style.pointerEvents = 'none';
+
+            try {
+                currentLang = currentLang === 'en' ? 'hi' : 'en';
+                if (currentLang === 'hi') {
+                    engSpan.classList.remove('active');
+                    hinSpan.classList.add('active');
+                } else {
+                    hinSpan.classList.remove('active');
+                    engSpan.classList.add('active');
+                }
+                applyUITranslations(currentLang);
+
+                // Get all existing message bubbles
+                const allMessages = messagesContainer.querySelectorAll('.message[data-original]');
+
+                if (allMessages.length > 0) {
+                    if (currentLang === 'hi') {
+                        // Show progress banner
+                        const banner = document.createElement('div');
+                        banner.className = 'translating-banner';
+                        banner.id = 'retranslate-banner';
+                        banner.textContent = '🔄 पुराने संदेशों का अनुवाद हो रहा है…';
+                        messagesContainer.prepend(banner);
+                        scrollToBottom();
+
+                        // Translate each bubble one by one
+                        let done = 0;
+                        for (const msgDiv of allMessages) {
+                            const original = msgDiv.dataset.original;
+                            const el = msgDiv.querySelector('.message-content');
+                            if (el) {
+                                el.style.opacity = '0.4';
+                                const hindi = await translateToHindi(original);
+                                if (hindi) {
+                                    el.innerHTML = formatText(hindi);
+                                }
+                                el.style.opacity = '1';
+                                done++;
+                                banner.textContent = `🔄 अनुवाद हो रहा है… (${done}/${allMessages.length})`;
+                            }
+                        }
+
+                        // Remove banner when done
+                        const b = document.getElementById('retranslate-banner');
+                        if (b) b.remove();
+                        if (window.MathJax) MathJax.typesetPromise();
+
+                    } else {
+                        // Restore all messages to original English instantly
+                        for (const msgDiv of allMessages) {
+                            const original = msgDiv.dataset.original;
+                            const el = msgDiv.querySelector('.message-content');
+                            if (el && original) {
+                                el.innerHTML = formatText(original);
+                            }
+                        }
+                        if (window.MathJax) MathJax.typesetPromise();
+                    }
+                }
+            } catch (err) {
+                console.error('Translation toggle error:', err);
+                // Remove any stuck banner
+                const b = document.getElementById('retranslate-banner');
+                if (b) b.remove();
+            } finally {
+                // ALWAYS unlock the button, even if something went wrong
+                langToggleEl.style.pointerEvents = 'auto';
+            }
+        }
+
+        async function translateToHindi(text) {
+            try {
+                // Convert HTML back to markdown so structure survives translation
+                const plainText = text
+                    .replace(/<br\s*\/?>/gi, '\n')
+                    .replace(/<hr[^>]*>/gi, '\n---\n')
+                    .replace(/<h2[^>]*>/gi, '\n## ').replace(/<\/h2>/gi, '\n')
+                    .replace(/<h3[^>]*>/gi, '\n### ').replace(/<\/h3>/gi, '\n')
+                    .replace(/<li[^>]*>/gi, '\n* ').replace(/<\/li>/gi, '')
+                    .replace(/<strong[^>]*>/gi, '**').replace(/<\/strong>/gi, '**')
+                    .replace(/<em[^>]*>/gi, '*').replace(/<\/em>/gi, '*')
+                    .replace(/<code[^>]*>/gi, '`').replace(/<\/code>/gi, '`')
+                    .replace(/<[^>]*>/g, '')   // strip any remaining tags
+                    .replace(/\n{3,}/g, '\n\n') // collapse excess blank lines
+                    .trim();
+
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            // System instruction: strictly a translator, not a tutor
+                            system_instruction: {
+                                parts: [{
+                                    text: `You are a pure translation engine. Your ONLY job is to translate English text into Hindi word-for-word. You must NEVER answer questions, add new information, change the meaning, summarise, or generate new content. You ONLY translate exactly what is given to you — nothing more, nothing less. If the input is a question, translate the question itself into Hindi — do NOT answer it.`
+                                }]
+                            },
+                            contents: [{
+                                parts: [{
+                                    text: `Translate the following text exactly into Hindi. Do not add, remove, or change any information. Keep all mathematical expressions, LaTeX ($x^2$, \\Delta, \\frac, etc.), numbers, and variable names exactly as they are — only translate the surrounding words. Return ONLY the translated Hindi text, nothing else:\n\n${plainText}`
+                                }]
+                            }],
+                            generationConfig: { temperature: 0, maxOutputTokens: 8192 }
+                        })
+                    }
+                );
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+
+    </script>
+</body>
+</html>

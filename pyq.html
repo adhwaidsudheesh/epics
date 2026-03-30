@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previous Year Papers - JEE Dreams</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #f39c12;
+            --accent-light: #f8b739;
+            --success: #27ae60;
+            --purple: #8e44ad;
+            --blue: #3498db;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --white: #ffffff;
+            --bg-light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            background: var(--bg-light);
+        }
+
+        /* Animated Background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            opacity: 0.05;
+        }
+
+        .background-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .back-home:hover {
+            background: var(--bg-light);
+            color: var(--accent);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 5% 6rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .page-header h1 .highlight {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Filter Section */
+        .filters {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-label {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--purple);
+            background: transparent;
+            color: var(--purple);
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+        }
+
+        .filter-btn:hover {
+            background: var(--purple);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--purple), #9b59b6);
+            color: var(--white);
+            border-color: var(--purple);
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: 'DM Sans', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+        }
+
+        /* Papers Grid */
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .paper-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--purple));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .paper-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .paper-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .paper-year {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .paper-session {
+            font-size: 1.1rem;
+            color: var(--purple);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .paper-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .info-tag {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(142, 68, 173, 0.15));
+            color: var(--purple);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .download-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .download-label {
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .download-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1.25rem;
+            background: linear-gradient(135deg, var(--bg-light), #f0f0f0);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: var(--white);
+            transform: translateX(5px);
+            border-color: var(--accent);
+        }
+
+        .download-btn .subject {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn .icon {
+            font-size: 1.2rem;
+        }
+
+        .solution-btn {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(39, 174, 96, 0.15));
+            color: var(--success);
+        }
+
+        .solution-btn:hover {
+            background: linear-gradient(135deg, var(--success), #2ecc71);
+            color: var(--white);
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .no-results h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .no-results p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.15));
+            border-left: 4px solid var(--blue);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .info-banner h3 {
+            color: var(--blue);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-banner p {
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .filter-buttons {
+                gap: 0.75rem;
+            }
+
+            .filter-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .papers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-home {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+
+    <header>
+        <nav class="nav-container">
+            <a href="index.html" class="logo">JEE Dreams</a>
+            <a href="index.html" class="back-home">
+                ← Back to Home
+            </a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Previous Year <span class="highlight">Question Papers</span></h1>
+            <p>Practice with authentic JEE Main papers from past years. Master the exam pattern and boost your confidence.</p>
+        </div>
+
+        <div class="info-banner">
+            <h3>📌 How to Use These Papers</h3>
+            <p>Download papers by year and session. Practice under timed conditions to simulate the real exam experience. All papers are organized by shift and subject for easy access.</p>
+        </div>
+
+        <div class="filters">
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search by year, session, or shift...">
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Filter by Year:</span>
+                <div class="filter-buttons" id="yearFilters">
+                    <button class="filter-btn active" data-filter="all">All Years</button>
+                    <button class="filter-btn" data-filter="2024">2024</button>
+                    <button class="filter-btn" data-filter="2023">2023</button>
+                    <button class="filter-btn" data-filter="2022">2022</button>
+                    <button class="filter-btn" data-filter="2021">2021</button>
+                    <button class="filter-btn" data-filter="2020">2020</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Filter by Session:</span>
+                <div class="filter-buttons" id="sessionFilters">
+                    <button class="filter-btn active" data-filter="all">All Sessions</button>
+                    <button class="filter-btn" data-filter="january">January</button>
+                    <button class="filter-btn" data-filter="march">March</button>
+                    <button class="filter-btn" data-filter="april">April</button>
+                    <button class="filter-btn" data-filter="june">June</button>
+                    <button class="filter-btn" data-filter="july">July</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="papers-grid" id="papersGrid">
+          
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none;">
+            <h3>No Papers Found</h3>
+            <p>Try adjusting your filters or search terms.</p>
+        </div>
+    </div>
+
+    <script>
+        // Sample paper data structure - Complete papers (all subjects in one PDF)
+        const papersData = [
+            {
+                year: 2024,
+                session: "January",
+                shift: "Shift 1",
+                date: "Jan 27, 2024",
+                paper: "papers/2024/january-shift1.pdf"
+            },
+            {
+                year: 2024,
+                session: "January",
+                shift: "Shift 2",
+                date: "Jan 27, 2024",
+                paper: "papers/2024/january-shift2.pdf"
+            },
+            {
+                year: 2024,
+                session: "April",
+                shift: "Shift 1",
+                date: "April 4, 2024",
+                paper: "papers/2024/april-shift1.pdf"
+            },
+            {
+                year: 2024,
+                session: "April",
+                shift: "Shift 2",
+                date: "April 4, 2024",
+                paper: "papers/2024/april-shift2.pdf"
+            },
+            {
+                year: 2023,
+                session: "January",
+                shift: "Shift 1",
+                date: "January 24, 2023",
+                paper: "papers/2023/january-shift1.pdf"
+            },
+            {
+                year: 2023,
+                session: "January",
+                shift: "Shift 2",
+                date: "January 24, 2023",
+                paper: "papers/2023/january-shift2.pdf"
+            },
+            {
+                year: 2023,
+                session: "March",
+                shift: "Shift 1",
+                date: "March 15, 2023",
+                paper: "papers/2023/march-shift1.pdf"
+            },
+            {
+                year: 2023,
+                session: "April",
+                shift: "Shift 1",
+                date: "April 6, 2023",
+                paper: "papers/2023/april-shift1.pdf"
+            },
+            {
+                year: 2023,
+                session: "June",
+                shift: "Shift 1",
+                date: "June 24, 2023",
+                paper: "papers/2023/june-shift1.pdf"
+            },
+            {
+                year: 2023,
+                session: "June",
+                shift: "Shift 2",
+                date: "June 24, 2023",
+                paper: "papers/2023/june-shift2.pdf"
+            },
+            {
+                year: 2022,
+                session: "June",
+                shift: "Shift 1",
+                date: "June 24, 2022",
+                paper: "papers/2022/june-shift1.pdf"
+            },
+            {
+                year: 2022,
+                session: "June",
+                shift: "Shift 2",
+                date: "June 24, 2022",
+                paper: "papers/2022/june-shift2.pdf"
+            },
+            {
+                year: 2021,
+                session: "February",
+                shift: "Shift 1",
+                date: "February 24, 2021",
+                paper: "papers/2021/february-shift1.pdf"
+            },
+            {
+                year: 2021,
+                session: "February",
+                shift: "Shift 2",
+                date: "February 24, 2021",
+                paper: "papers/2021/february-shift2.pdf"
+            },
+            {
+                year: 2019,
+                session: "January",
+                shift: "Shift 1",
+                date: "Jan 9, 2019",
+                paper: "papers/2019/january-shift1.pdf"
+            }
+        ];
+
+        let currentYearFilter = 'all';
+        let currentSessionFilter = 'all';
+        let currentSearchTerm = '';
+
+        // Render papers
+        function renderPapers() {
+            const papersGrid = document.getElementById('papersGrid');
+            const noResults = document.getElementById('noResults');
+            
+            // Filter papers
+            const filteredPapers = papersData.filter(paper => {
+                const matchesYear = currentYearFilter === 'all' || paper.year.toString() === currentYearFilter;
+                const matchesSession = currentSessionFilter === 'all' || paper.session.toLowerCase() === currentSessionFilter;
+                const matchesSearch = currentSearchTerm === '' || 
+                    paper.year.toString().includes(currentSearchTerm) ||
+                    paper.session.toLowerCase().includes(currentSearchTerm.toLowerCase()) ||
+                    paper.shift.toLowerCase().includes(currentSearchTerm.toLowerCase());
+                
+                return matchesYear && matchesSession && matchesSearch;
+            });
+
+            // Clear grid
+            papersGrid.innerHTML = '';
+
+            // Show/hide no results
+            if (filteredPapers.length === 0) {
+                noResults.style.display = 'block';
+                papersGrid.style.display = 'none';
+            } else {
+                noResults.style.display = 'none';
+                papersGrid.style.display = 'grid';
+
+                // Render each paper
+                filteredPapers.forEach(paper => {
+                    const paperCard = document.createElement('div');
+                    paperCard.className = 'paper-card';
+                    
+                    let solutionHTML = '';
+                    if (paper.solution) {
+                        solutionHTML = `
+                            <div class="download-section">
+                                <span class="download-label">📖 Solution Available:</span>
+                                <div class="download-buttons">
+                                    <a href="${paper.solution}" download class="download-btn solution-btn">
+                                        <span class="subject"><span class="icon">✅</span> Download Solution PDF</span>
+                                        <span class="icon">⬇</span>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    paperCard.innerHTML = `
+                        <div class="paper-year">JEE Main ${paper.year}</div>
+                        <div class="paper-session">${paper.session} Session</div>
+                        <div class="paper-info">
+                            <span class="info-tag">${paper.shift}</span>
+                            <span class="info-tag">${paper.date}</span>
+                            <span class="info-tag">All Subjects</span>
+                        </div>
+                        <div class="download-section">
+                            <span class="download-label">📄 Download Question Paper:</span>
+                            <div class="download-buttons">
+                                <a href="${paper.paper}" download class="download-btn">
+                                    <span class="subject"><span class="icon">📋</span> Complete Paper (Physics + Chemistry + Maths)</span>
+                                    <span class="icon">⬇</span>
+                                </a>
+                            </div>
+                        </div>
+                        ${solutionHTML}
+                    `;
+                    
+                    papersGrid.appendChild(paperCard);
+                });
+            }
+        }
+
+        // Year filter buttons
+        document.getElementById('yearFilters').addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('#yearFilters .filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+                currentYearFilter = e.target.getAttribute('data-filter');
+                renderPapers();
+            }
+        });
+
+        // Session filter buttons
+        document.getElementById('sessionFilters').addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('#sessionFilters .filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                e.target.classList.add('active');
+                currentSessionFilter = e.target.getAttribute('data-filter');
+                renderPapers();
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value;
+            renderPapers();
+        });
+
+        // Initial render
+        renderPapers();
+    </script>
+</body>
+</html>
